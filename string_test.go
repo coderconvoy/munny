@@ -1,6 +1,9 @@
 package munny
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 func TestStringer(t *testing.T) {
 	ts := []struct {
@@ -52,4 +55,33 @@ func TestParse(t *testing.T) {
 		}
 	}
 
+}
+
+func TestMarshal(t *testing.T) {
+	td := []M{
+		23, 34, 121, -604, 0, -1,
+	}
+
+	md, err := json.Marshal(td)
+	if err != nil {
+		t.Log(err)
+		t.Fail()
+	}
+
+	var sd []M
+
+	err = json.Unmarshal(md, &sd)
+
+	if err != nil {
+		t.Log(err)
+		t.Fail()
+	}
+
+	for k, v := range td {
+		if sd[k] != v {
+			t.Log("Expected %d, got %d", int(v), int(sd[k]))
+			t.Fail()
+
+		}
+	}
 }

@@ -74,6 +74,17 @@ func (m M) MarshalJSON() ([]byte, error) {
 	return []byte(`"` + m.String() + `"`), nil
 }
 
+func (m *M) UnmarshalJSON(b []byte) error {
+	s := string(b)
+	s = strings.Trim(s, "\"\t \n\r")
+	v, err := ParseM(s)
+	if err != nil {
+		return err
+	}
+	*m = v
+	return nil
+}
+
 func (m M) String() string {
 	pm := m
 	if m < 0 {
